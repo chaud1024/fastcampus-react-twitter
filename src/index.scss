@@ -7,6 +7,7 @@ $primaryColorActive: #3b82f6;
 $grayText: #9ca3af;
 $gray: #6b7280;
 $grayActive: #4c515b;
+$black: #181818;
 $danger: #dc2626;
 $dangerActive: #dc26268e;
 
@@ -319,5 +320,27 @@ body {
 
   &__error {
     color: rgb(255, 34, 34);
+  }
+
+  &__btn--google {
+    @extend .form__btn--submit;
+    background-color: $white;
+    color: $primaryColorActive;
+
+    &:hover,
+    &:focus {
+      background-color: $primaryColorActive;
+      color: $white;
+    }
+  }
+  &__btn--github {
+    @extend .form__btn--submit;
+    background-color: $black;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      background-color: $backgroundActive;
+    }
   }
 }
