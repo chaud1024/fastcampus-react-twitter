@@ -43,6 +43,8 @@ export default function SignupForm() {
       setPassword(value);
       if (value?.length < 8) {
         setError("비밀번호는 8자리 이상 입력해주세요.");
+      } else if (value !== passwordConfirmation) {
+        setError("비밀번호가 일치하지 않습니다.");
       } else {
         setError("");
       }
@@ -103,12 +105,11 @@ export default function SignupForm() {
 
       <div className="form__block">
         이미 계정이 있나요?
-        <Link to="/login" className="form__link">
+        <Link to="/uesrs/login" className="form__link">
           로그인하기
         </Link>
       </div>
-      <div className="form__block">
-        회원가입하기
+      <div className="form__block--lg">
         <button
           type="submit"
           className="form__btn--submit"
