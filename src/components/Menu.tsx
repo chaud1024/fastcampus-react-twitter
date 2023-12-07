@@ -1,9 +1,13 @@
+import AuthContext from "context/AuthContext";
+import { useContext } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsHouse } from "react-icons/bs";
-import { MdLogout } from "react-icons/md";
+import { MdLogin, MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 export default function MenuList() {
+  const { user } = useContext(AuthContext);
+
   const navicate = useNavigate();
   return (
     <div className="footer">
@@ -16,10 +20,17 @@ export default function MenuList() {
           <BiUserCircle />
           Profile
         </button>
-        <button type="button" onClick={() => navicate("/login")}>
-          <MdLogout />
-          Logout
-        </button>
+        {user === null ? (
+          <button type="button" onClick={() => navicate("/user/login")}>
+            <MdLogin />
+            Login
+          </button>
+        ) : (
+          <button type="button" onClick={() => navicate("/")}>
+            <MdLogout />
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );
