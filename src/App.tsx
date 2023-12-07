@@ -1,5 +1,6 @@
 import Layout from "components/Layout";
 import Router from "components/Router";
+import Loader from "components/loader/Loader";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "firebaseApp";
 import { useEffect, useState } from "react";
@@ -28,7 +29,7 @@ function App({}) {
   return (
     <Layout>
       <ToastContainer />
-      {init ? <Router isAuthenticated={isAuthenticated} /> : "Loading"}
+      {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
     </Layout>
   );
 }
