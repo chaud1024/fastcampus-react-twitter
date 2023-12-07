@@ -111,7 +111,7 @@ export default function SignupForm() {
         회원가입하기
         <button
           type="submit"
-          className="form__btn-submit"
+          className="form__btn--submit"
           disabled={error.length > 0}>
           회원가입
         </button>
