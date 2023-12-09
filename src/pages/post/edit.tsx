@@ -1,7 +1,5 @@
+import PostEditForm from "components/posts/PostEditForm";
+
 export default function PostEdit() {
-  return (
-    <div>
-      <h1>PostEdit</h1>
-    </div>
-  );
+  return <PostEditForm />;
 }
