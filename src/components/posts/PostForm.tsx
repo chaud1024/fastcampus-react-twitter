@@ -24,7 +24,10 @@ export default function PostForm() {
         }),
         uid: user?.uid,
         email: user?.email,
+        hashTags: tags,
       });
+      setTags([]);
+      setHashTag("");
       setContent("");
       toast.success("게시글을 생성했습니다.");
     } catch (e: any) {
