@@ -44,6 +44,13 @@ export default function PostBox({ post }: PostBoxProps) {
           </div>
         </div>
         <div className="post__box-content">{post?.content}</div>
+        <div className="post-form__hashtags-outputs">
+          {post?.hashTags?.map((tag, index) => (
+            <span className="post-form__hashtags-tag" key={index}>
+              #{tag}
+            </span>
+          ))}
+        </div>
       </Link>
       <div className="post__box-footer">
         {/* user.uid 가 post.uid가 같은 경우 = 즉 로그인한 사용자의 포스트일 경우 */}

@@ -255,11 +255,12 @@ body {
 
     & a {
       text-decoration: none;
+      padding: 0 10px;
+      display: block;
     }
 
     &-profile {
       text-decoration: none;
-      padding: 0px 10px;
 
       &-img,
       &-icon {
@@ -273,7 +274,7 @@ body {
     &-content {
       display: block;
       font-weight: 500;
-      padding: 16px;
+      padding: 16px 0;
     }
 
     &-footer {
