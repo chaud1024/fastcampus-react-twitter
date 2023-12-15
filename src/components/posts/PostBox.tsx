@@ -1,12 +1,13 @@
 import AuthContext from "context/AuthContext";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "firebaseApp";
+import { db, storage } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment, FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { deleteObject, ref } from "firebase/storage";
 
 interface PostBoxProps {
   post: PostProps;
@@ -15,11 +16,22 @@ interface PostBoxProps {
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  // fire storage에 있는 이미지의 ref 할당
+  const imgRef = ref(storage, post?.imageUrl);
 
   const handleDelete = async () => {
     const confirm = window.confirm("해당 게시글을 삭제하시겠습니까?");
 
     if (confirm) {
+      // fire storage 이미지 먼저 삭제
+      // Delete the file
+      deleteObject(imgRef)
+        .then(() => {
+          // File deleted successfully => 이 부분 생략 가능
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       await deleteDoc(doc(db, "posts", post?.id));
       toast.success("게시글을 삭제했습니다.");
       navigate("/");
