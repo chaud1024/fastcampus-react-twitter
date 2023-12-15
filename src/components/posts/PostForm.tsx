@@ -26,12 +26,10 @@ export default function PostForm() {
     fileReader?.readAsDataURL(file);
 
     fileReader.onloadend = (e: any) => {
-      // console.log(e);
       const { result } = e?.currentTarget;
       setImageFile(result);
     };
   };
-  console.log(imageFile);
 
   const handleSubmit = async (e: any) => {
     setIsSubmitting(true);
