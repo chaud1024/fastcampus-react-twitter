@@ -16,6 +16,7 @@ export interface PostProps {
   likeCount?: number;
   comments?: any;
   hashTags?: string[];
+  imageUrl?: string;
 }
 export default function Homepage() {
   const [posts, setPosts] = useState<PostProps[]>([]);
@@ -24,7 +25,7 @@ export default function Homepage() {
   useEffect(() => {
     if (user) {
       let postsRef = collection(db, "posts");
-      let postsQuery = query(postsRef, orderBy("createdAt", "asc"));
+      let postsQuery = query(postsRef, orderBy("createdAt", "desc"));
 
       onSnapshot(postsQuery, (snapshot) => {
         let dataObj = snapshot.docs.map((doc) => ({
