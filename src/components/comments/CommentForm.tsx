@@ -5,11 +5,11 @@ import { PostProps } from "pages/home";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
-export interface CommentProps {
+export interface CommentFormProps {
   post: PostProps | null;
 }
 
-export default function CommentForm({ post }: CommentProps) {
+export default function CommentForm({ post }: CommentFormProps) {
   const [comment, setComment] = useState<string>("");
   const { user } = useContext(AuthContext);
 
@@ -32,7 +32,7 @@ export default function CommentForm({ post }: CommentProps) {
       };
 
       await updateDoc(postRef, {
-        comment: arrayUnion(commentObj),
+        comments: arrayUnion(commentObj),
       });
 
       toast.success("댓글을 생성했습니다.");
