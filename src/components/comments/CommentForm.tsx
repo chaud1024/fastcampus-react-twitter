@@ -5,7 +5,7 @@ import { PostProps } from "pages/home";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
-interface CommentProps {
+export interface CommentProps {
   post: PostProps | null;
 }
 
