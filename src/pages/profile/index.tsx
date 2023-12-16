@@ -12,8 +12,12 @@ import { PostProps } from "pages/home";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type TabType = "my" | "liked";
+
 export default function ProfilePage() {
-  const [posts, setPosts] = useState<PostProps[]>([]);
+  const [activeTab, setActiveTab] = useState<TabType>("my");
+  const [myPosts, setMyPosts] = useState<PostProps[]>([]);
+  const [likedPosts, setLikedPosts] = useState<PostProps[]>([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -23,22 +27,34 @@ export default function ProfilePage() {
     if (user) {
       let postsRef = collection(db, "posts");
       // postsRef 는 현재 로그인된 유저의 uid와 동일한 경우만 가져온다: 즉 로그인한 유저의 글만 가져온다
-      let postsQuery = query(
+      const myPostsQuery = query(
         postsRef,
         where("uid", "==", user.uid),
         orderBy("createdAt", "desc"),
       );
+      const likedPostsQuery = query(
+        postsRef,
+        where("likes", "array-contains", user.uid),
+        orderBy("createdAt", "desc"),
+      );
 
-      onSnapshot(postsQuery, (snapshot) => {
+      onSnapshot(myPostsQuery, (snapshot) => {
         let dataObj = snapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc?.id,
         }));
-        console.log(dataObj);
-        setPosts(dataObj as PostProps[]);
+        setMyPosts(dataObj as PostProps[]);
+      });
+      onSnapshot(likedPostsQuery, (snapshot) => {
+        let dataObj = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc?.id,
+        }));
+        setLikedPosts(dataObj as PostProps[]);
+        console.log(likedPosts);
       });
     }
-  }, [user]);
+  }, [user, likedPosts, myPosts]);
   return (
     <div className="home">
       <div className="home__top">
@@ -65,18 +81,41 @@ export default function ProfilePage() {
           <div className="profile__email">{user?.email}</div>
         </div>
         <div className="home__tabs">
-          <div className="home__tab home__tab--active">Your posts</div>
-          <div className="home__tab home__tab">Liked</div>
+          <div
+            className={`home__tab ${activeTab === "my" && "home__tab--active"}`}
+            onClick={() => setActiveTab("my")}>
+            Your posts
+          </div>
+          <div
+            className={`home__tab ${
+              activeTab === "liked" && "home__tab--active"
+            }`}
+            onClick={() => setActiveTab("liked")}>
+            Liked
+          </div>
         </div>
-        <div className="post">
-          {posts?.length > 0 ? (
-            posts.map((post) => <PostBox post={post} key={post.id} />)
-          ) : (
-            <div className="post__no-posts">
-              <div className="post__text">게시글이 없습니다.</div>
-            </div>
-          )}
-        </div>
+        {activeTab === "my" && (
+          <div className="post">
+            {myPosts?.length > 0 ? (
+              myPosts.map((post) => <PostBox post={post} key={post.id} />)
+            ) : (
+              <div className="post__no-posts">
+                <div className="post__text">게시글이 없습니다.</div>
+              </div>
+            )}
+          </div>
+        )}
+        {activeTab === "liked" && (
+          <div className="posts">
+            {likedPosts?.length > 0 ? (
+              likedPosts.map((post) => <PostBox post={post} key={post.id} />)
+            ) : (
+              <div className="post__no-posts">
+                <div className="post__text">게시글이 없습니다.</div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
