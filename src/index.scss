@@ -307,6 +307,39 @@ body {
     display: flex;
     gap: 4px;
     align-items: center;
+    width: 100%;
+
+    &--between {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__following-btn {
+    @extend .button;
+    background-color: $primaryColor;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      background-color: $white;
+      color: $primaryColor;
+    }
+  }
+
+  &__follow-btn {
+    @extend .button;
+
+    background-color: $white;
+    color: $primaryColor;
+
+    &:hover,
+    &:focus {
+      background-color: $primaryColor;
+      color: $white;
+    }
   }
 
   &__email,
@@ -316,7 +349,7 @@ body {
   }
 
   &__box {
-    padding: 10px 0px;
+    padding: 10px;
     border-bottom: 1px solid $border-color;
 
     & a {
@@ -344,8 +377,8 @@ body {
     }
 
     &-footer {
-      padding: 0 16px;
       margin-top: 10px;
+      margin-bottom: 16px;
       font-size: 14px;
       display: flex;
       gap: 8px;
