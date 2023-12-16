@@ -1,3 +1,4 @@
+import CommentForm from "components/comments/CommentForm";
 import Loader from "components/loader/Loader";
 import PostBox from "components/posts/PostBox";
 import PostHeader from "components/posts/PostHeader";
@@ -29,7 +30,14 @@ export default function PostDetail() {
   return (
     <div className="post">
       <PostHeader />
-      {post ? <PostBox post={post} /> : <Loader />}
+      {post ? (
+        <>
+          <PostBox post={post} />
+          <CommentForm post={post} />
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }
