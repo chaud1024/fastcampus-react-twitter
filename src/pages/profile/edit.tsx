@@ -1,7 +1,12 @@
 import PostHeader from "components/posts/PostHeader";
 import AuthContext from "context/AuthContext";
 import { updateProfile } from "firebase/auth";
-import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadString,
+} from "firebase/storage";
 import { storage } from "firebaseApp";
 import { useContext, useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
@@ -14,6 +19,8 @@ export default function ProfileEdit() {
   const [displayName, setDisplayName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const STORAGE_DOWNLOAD_URL_STR = "https://firebasestorage.googleapis.com";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -31,8 +38,16 @@ export default function ProfileEdit() {
     e.preventDefault();
 
     try {
-      // 기존 이미지 삭제의 경우 만들어둔 프로필 디폴트 이미지 제공
-
+      // 기존 스토리지 이미지 삭제만 하는 경우 만들어둔 프로필 디폴트 이미지 제공
+      // 스토리지 이미지가 아닌 경우에는 삭제하지 않음
+      if (user?.photoURL && user?.photoURL.includes(STORAGE_DOWNLOAD_URL_STR)) {
+        const imageRef = ref(storage, user?.photoURL);
+        if (imageRef) {
+          await deleteObject(imageRef).catch((error) => {
+            console.log(error);
+          });
+        }
+      }
       // 새로운 이미지 업로드
       if (imageUrl) {
         const data = await uploadString(storageRef, imageUrl, "data_url");
@@ -96,18 +111,19 @@ export default function ProfileEdit() {
             onChange={handleChange}
             value={displayName}
           />
+          {imageUrl && (
+            <div className="post-form__attachment">
+              <img src={imageUrl} alt="attachment" width={100} height={100} />
+              <button
+                className="post-form__clear-btn"
+                type="button"
+                onClick={handleDeleteImage}>
+                Clear
+              </button>
+            </div>
+          )}
         </div>
-        {imageUrl && (
-          <div className="post-form__attachment">
-            <img src={imageUrl} alt="attachment" width={100} height={100} />
-            <button
-              className="post-form__clear-btn"
-              type="button"
-              onClick={handleDeleteImage}>
-              Clear
-            </button>
-          </div>
-        )}
+
         <div className="post-form__submit-area">
           <div className="post-form__image-area">
             <label htmlFor="file-input" className="post-form__file">
