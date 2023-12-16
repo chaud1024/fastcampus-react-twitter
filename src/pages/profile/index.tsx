@@ -62,7 +62,7 @@ export default function ProfilePage() {
         </div>
         <div className="profile__text">
           <div className="profile__name">{user?.displayName || "사용자님"}</div>
-          <div className="profile__name">{user?.email}</div>
+          <div className="profile__email">{user?.email}</div>
         </div>
         <div className="home__tabs">
           <div className="home__tab home__tab--active">Your posts</div>
