@@ -51,7 +51,6 @@ export default function ProfilePage() {
           id: doc?.id,
         }));
         setLikedPosts(dataObj as PostProps[]);
-        console.log(likedPosts);
       });
     }
   }, [user, likedPosts, myPosts]);
