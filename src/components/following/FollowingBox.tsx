@@ -1,7 +1,9 @@
 import AuthContext from "context/AuthContext";
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   onSnapshot,
   setDoc,
@@ -52,6 +54,20 @@ export default function FollowingBox({ post }: FollowingProps) {
             merge: true,
           },
         );
+
+        // 팔로잉 알림 만들기
+        await addDoc(collection(db, "notifications"), {
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          uid: post?.uid, // 내가 팔로우를 누른 사람(포스트 작성자)의 uid
+          isRead: false,
+          url: `#`,
+          content: `${user?.email || user?.displayName}가 팔로우를 했습니다.`,
+          // 게시글을 쓴 사용자에게 내가 팔로우를 눌렀다는 내용의 알림이 간다
+        });
 
         toast.success(`${post.email}님을 팔로우 합니다.`);
       }
