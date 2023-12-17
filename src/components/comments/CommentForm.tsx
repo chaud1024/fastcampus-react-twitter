@@ -1,5 +1,11 @@
 import AuthContext from "context/AuthContext";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import React, { useContext, useState } from "react";
@@ -12,6 +18,11 @@ export interface CommentFormProps {
 export default function CommentForm({ post }: CommentFormProps) {
   const [comment, setComment] = useState<string>("");
   const { user } = useContext(AuthContext);
+
+  // post.content의 길이가 너무 길 때 생략시켜 보여주는 함수
+  const truncate = (str: string) => {
+    return str?.length > 10 ? str?.substring(0, 10) + "..." : str;
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -35,6 +46,20 @@ export default function CommentForm({ post }: CommentFormProps) {
         comments: arrayUnion(commentObj),
       });
 
+      // 댓글 달림 알림 만들기 단, 내가 작성한 글에 내가 댓글 달 땐 알림 없음
+      if (user?.uid !== post?.uid) {
+        await addDoc(collection(db, "notifications"), {
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          uid: post?.uid,
+          isRead: false,
+          url: `/posts/${post?.id}`,
+          content: `"${truncate(post?.content)}" 글에 댓글이 작성되었습니다.`,
+        });
+      }
       toast.success("댓글을 생성했습니다.");
       setComment("");
       try {
