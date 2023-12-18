@@ -1,6 +1,7 @@
 import AuthContext from "context/AuthContext";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 import { useContext } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
@@ -9,7 +10,6 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdLogin, MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useTranslation from "hooks/useTranslation";
 
 export default function MenuList() {
   const { user } = useContext(AuthContext);
@@ -22,24 +22,24 @@ export default function MenuList() {
       <div className="footer__grid">
         <button type="button" onClick={() => navicate("/")}>
           <BsHouse />
-          {t("MENU_HOME")}
+          <span className="footer__grid--text">{t("MENU_HOME")}</span>
         </button>
         <button type="button" onClick={() => navicate("/profile")}>
           <BiUserCircle />
-          {t("MENU_PROFILE")}
+          <span className="footer__grid--text">{t("MENU_PROFILE")}</span>
         </button>
         <button type="button" onClick={() => navicate("/search")}>
           <AiOutlineSearch />
-          {t("MENU_SEARCH")}
+          <span className="footer__grid--text">{t("MENU_SEARCH")}</span>
         </button>
         <button type="button" onClick={() => navicate("/notification")}>
           <IoMdNotificationsOutline />
-          {t("MENU_NOTI")}
+          <span className="footer__grid--text">{t("MENU_NOTI")}</span>
         </button>
         {user === null ? (
           <button type="button" onClick={() => navicate("/user/login")}>
             <MdLogin />
-            {t("MENU_LOGIN")}
+            <span className="footer__grid--text">{t("MENU_LOGIN")}</span>
           </button>
         ) : (
           <button
@@ -50,7 +50,7 @@ export default function MenuList() {
               toast.success("로그아웃 되었습니다.");
             }}>
             <MdLogout />
-            {t("MENU_LOGOUT")}
+            <span className="footer__grid--text">{t("MENU_LOGOUT")}</span>
           </button>
         )}
       </div>
