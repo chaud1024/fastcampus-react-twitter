@@ -5,10 +5,11 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "firebaseApp";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
 
-function App({}) {
+import { RecoilRoot } from "recoil";
+
+function App() {
   const auth = getAuth(app);
   const [init, setInit] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
@@ -27,15 +28,17 @@ function App({}) {
   }, [auth]);
 
   return (
-    <Layout>
-      <ToastContainer
-        theme="dark"
-        autoClose={1000}
-        hideProgressBar
-        newestOnTop
-      />
-      {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
-    </Layout>
+    <RecoilRoot>
+      <Layout>
+        <ToastContainer
+          theme="dark"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop
+        />
+        {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
+      </Layout>
+    </RecoilRoot>
   );
 }
 
