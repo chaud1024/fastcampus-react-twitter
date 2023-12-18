@@ -1,3 +1,4 @@
+import { languageState } from "atom";
 import PostBox from "components/posts/PostBox";
 import AuthContext from "context/AuthContext";
 import {
@@ -12,6 +13,8 @@ import { PostProps } from "pages/home";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useRecoilState } from "recoil";
+
 type TabType = "my" | "liked";
 
 export default function ProfilePage() {
@@ -20,8 +23,14 @@ export default function ProfilePage() {
   const [likedPosts, setLikedPosts] = useState<PostProps[]>([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [language, setLanguage] = useRecoilState(languageState);
 
   const PROFILE_DEFAULT_URL = "/logo512.png";
+
+  const handleLanguage = () => {
+    setLanguage(language === "ko" ? "en" : "ko");
+    localStorage.setItem("language", language === "ko" ? "en" : "ko");
+  };
 
   useEffect(() => {
     if (user) {
@@ -53,7 +62,7 @@ export default function ProfilePage() {
         setLikedPosts(dataObj as PostProps[]);
       });
     }
-  }, [user, likedPosts, myPosts]);
+  }, [user]);
   return (
     <div className="home">
       <div className="home__top">
@@ -66,14 +75,22 @@ export default function ProfilePage() {
             width={100}
             height={100}
           />
-          <button
-            type="button"
-            className="profile__btn"
-            onClick={() => {
-              navigate("/profile/edit");
-            }}>
-            Edit profile
-          </button>
+          <div className="profile__flex">
+            <button
+              type="button"
+              className="profile__btn"
+              onClick={() => {
+                navigate("/profile/edit");
+              }}>
+              Edit profile
+            </button>
+            <button
+              type="button"
+              className="profile__btn--language"
+              onClick={handleLanguage}>
+              {language === "ko" ? "KOR" : "ENG"}
+            </button>
+          </div>
         </div>
         <div className="profile__text">
           <div className="profile__name">{user?.displayName || "사용자님"}</div>
