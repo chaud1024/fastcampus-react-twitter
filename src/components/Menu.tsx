@@ -9,34 +9,37 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdLogin, MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useTranslation from "hooks/useTranslation";
 
 export default function MenuList() {
   const { user } = useContext(AuthContext);
 
   const navicate = useNavigate();
+  const t = useTranslation();
+
   return (
     <div className="footer">
       <div className="footer__grid">
         <button type="button" onClick={() => navicate("/")}>
           <BsHouse />
-          Home
+          {t("MENU_HOME")}
         </button>
         <button type="button" onClick={() => navicate("/profile")}>
           <BiUserCircle />
-          Profile
+          {t("MENU_PROFILE")}
         </button>
         <button type="button" onClick={() => navicate("/search")}>
           <AiOutlineSearch />
-          Search
+          {t("MENU_SEARCH")}
         </button>
         <button type="button" onClick={() => navicate("/notification")}>
           <IoMdNotificationsOutline />
-          Notification
+          {t("MENU_NOTI")}
         </button>
         {user === null ? (
           <button type="button" onClick={() => navicate("/user/login")}>
             <MdLogin />
-            Login
+            {t("MENU_LOGIN")}
           </button>
         ) : (
           <button
@@ -47,7 +50,7 @@ export default function MenuList() {
               toast.success("로그아웃 되었습니다.");
             }}>
             <MdLogout />
-            Logout
+            {t("MENU_LOGOUT")}
           </button>
         )}
       </div>
